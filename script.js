@@ -4,8 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const taskList = document.getElementById('task-list');
     const taskImage = document.querySelector('.task-image');
 
+    const todosContainer = document.querySelector('.todos-container')
+
     const toggleEmptyState = () => {
         taskImage.style.display = taskList.children.length === 0 ? 'block' : 'none';
+        todosContainer.style.width = taskList.children.length > 0 ? '100%' : '50%';
     };
 
     const addTask = (event) => {
@@ -19,7 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
         li.innerHTML = `
         <input type="checkbox" class="checkbox">
         <span>${taskText}</span>
+        <div class="task-buttons">
+            <button class="edit-btn">
+            <i class="fa-solid fa-pen"></i></button>
+            <button class="delete-btn">
+            <i class="fa-solid fa-trash"></i></button>
         `;
+        
+        const checkbox = li.querySelector('.checkbox');
+        const editBtn = li.querySelector('.edit-btn');
+
+        editBtn.addEventListener('click', () => {
+            if(!checkbox.checked){
+                taskInput.value = li.querySelector('span').textContent;
+                li.remove();
+                toggleEmptyState();
+            }
+        });
+
+        li.querySelector('.delete-btn').addEventListener("click", () => {
+            li.remove();
+            toggleEmptyState();
+        });
 
         taskList.appendChild(li);
         taskInput.value = '';
